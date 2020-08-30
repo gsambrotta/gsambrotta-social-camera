@@ -2,14 +2,15 @@
 import 'regenerator-runtime/runtime'
 import React, { useEffect, useState } from 'react'
 import { Layout } from '../../components/layout'
-import { Button, Flex } from '../../components/styles'
-import { Camera, Wrapper, Error, Video, Canvas } from './style'
+import { Button, ButtonGroup, Flex } from '../../components/styles'
+import { Camera, Wrapper, Error, Video, Canvas, Download } from './style'
 
 const CAMERA_HEIGHT = 400
 const CAMERA_WIDTH = 300
 
 const Profile = () => {
   const [errorMsg, setErrorMsg] = useState('none')
+  const [shot, setShot] = useState(null)
   const canvas = React.createRef()
   const streamContainer = React.createRef()
 
@@ -41,12 +42,21 @@ const Profile = () => {
       .drawImage(video, -150, 0, 550, CAMERA_HEIGHT)
 
     const img = canvas.current.toDataURL('image/jpeg')
+    setShot(img)
     console.log('img', img)
   }
 
   function handleClearShot() {
     const context = canvas.current.getContext('2d')
     context.clearRect(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
+  }
+
+  function handleSaveShot() {
+    var anchor = document.createElement('a')
+    anchor.href = draw.toDataURL('image/png')
+    anchor.download = 'girbil-avatar.jpeg'
+
+    handleClearShot()
   }
 
   return (
@@ -67,9 +77,19 @@ const Profile = () => {
             uploaded snapshot shows here
             <Canvas ref={canvas}></Canvas>
           </Camera>
-          <Button className='green' onClick={handleClearShot}>
-            Clear
-          </Button>
+          <ButtonGroup flexDirection={'row'}>
+            <Button
+              className='green'
+              onClick={handleClearShot}
+              width={shot !== null ? '50%' : '100'}>
+              Clear
+            </Button>
+            {shot !== null && (
+              <Download href={shot} download='girbil-avatar.jpeg'>
+                <Button className='green'>Save</Button>
+              </Download>
+            )}
+          </ButtonGroup>
         </Wrapper>
       </Flex>
     </Layout>

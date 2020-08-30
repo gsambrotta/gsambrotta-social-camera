@@ -14,12 +14,14 @@ export const Camera = styled.div`
 export const Video = styled.video`
   height: 400px;
   width: 300px;
+  margin-top: 10px;
   object-fit: cover;
 `
 
 export const Canvas = styled.canvas`
   height: 400px;
   width: 300px;
+  margin-top: 10px;
   object-fit: cover;
 `
 
@@ -37,4 +39,9 @@ export const Error = styled.p`
   display: ${(props) => props.display};
   text-align: center;
   font: bold 14px/20px 'Source sans pro';
+`
+
+export const Download = styled.a`
+  margin-left: 10px;
+  width: 50%;
 `
