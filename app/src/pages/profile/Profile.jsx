@@ -58,10 +58,27 @@ const Profile = () => {
       })
 
       const { getSignedUrl } = await res.json()
-      setShot(getSignedUrl)
+      getShot(getSignedUrl)
     } catch (err) {
       // Note: ideally here a better error handling
       console.log('error')
+    }
+  }
+
+  async function getShot(getSignedUrl) {
+    console.log('getSignedUrl', getSignedUrl)
+
+    try {
+      const uploadRes = await fetch(getSignedUrl, {
+        method: 'GET',
+        mode: 'cors',
+      })
+      const img = await uploadRes()
+      return setShot(img)
+
+    } catch (err) {
+      // Note: ideally here a better error handling
+      console.log('error uploading shot')
     }
   }
 
