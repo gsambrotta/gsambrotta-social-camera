@@ -93,7 +93,7 @@ const Profile = () => {
           },
           body: JSON.stringify({
             id: uuid,
-            contentType: 'image/jpg',
+            contentType: 'image/jpg'
           }),
         })
 
@@ -111,18 +111,18 @@ const Profile = () => {
   }, [shot])
 
   async function uploadShot(putSignedUrl) {
-    console.log('putSignedUrl', putSignedUrl)
     const buffer = Buffer.from(shot.replace(/^data:image\/\w+;base64,/, ""), 'base64');
 
-    // console.log('buffer', buffer)
-    // console.log('shot', shot)
     try {
       const uploadRes = await fetch(putSignedUrl, {
         method: 'PUT',
         mode: 'cors',
-        body: shot,
+        body: buffer,
+        headers: {
+          'Content-Type': 'image/jpeg',
+          'Content-Encoding': 'base64',
+        }
       })
-      console.log('uploaded!')
       return
 
     } catch (err) {

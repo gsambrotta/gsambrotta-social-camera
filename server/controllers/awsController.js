@@ -46,7 +46,7 @@ exports.putPresignedUrl = async (req, res) => {
     Key: `giorgia/${id}/avatar.jpg`,
     Expires: 15 * 60, // 15 minutes
     ContentType: contentType,
-    //ACL: 'public-read',
+    ContentEncoding: 'base64',
   }
   const url = await S3.getSignedUrlPromise('putObject', params)
 
