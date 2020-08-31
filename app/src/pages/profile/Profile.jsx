@@ -1,6 +1,7 @@
 /* eslint-disable global-require */
 import 'regenerator-runtime/runtime'
 import React, { useEffect, useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { Layout } from '../../components/layout'
 import { Button, ButtonGroup, Flex } from '../../components/styles'
 import { Camera, Wrapper, Error, Video, Canvas, Download } from './style'
@@ -11,6 +12,7 @@ const CAMERA_WIDTH = 300
 const Profile = () => {
   const [errorMsg, setErrorMsg] = useState('none')
   const [shot, setShot] = useState(null)
+  const [uuid, setUuid] = useState(null)
   const canvas = React.createRef()
   const streamContainer = React.createRef()
 
@@ -23,6 +25,10 @@ const Profile = () => {
 
         streamContainer.current.srcObject = stream
         streamContainer.current.play()
+
+        // UUID would ideally come from db or any single source of true. 
+        // This is just a quick implementation
+        setUuid(uuidv4())
       } catch (error) {
         console.log(`Error streaming video: ${error}`)
         setErrorMsg('block')
@@ -32,31 +38,100 @@ const Profile = () => {
     streamVideo()
   }, [])
 
+  // NOTE: This function is not really necessary, I mostly implemented
+  // for the sake of showing how to get and download an image from S3.
+  // I personally think is better to give the local image to the user
+  // which make the process faster and with better performance
+  // since the image doesn't need to be download again
+  async function getSignedUrl() {
+    console.log('id', uuid)
+    try {
+      const res = await fetch('http://localhost:3000/api/get-presigned-url', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          id: uuid,
+        }),
+      })
+
+      const { getSignedUrl } = await res.json()
+      // setShot(getSignedUrl)
+    } catch (err) {
+      // Note: ideally here a better error handling
+      console.log('error')
+    }
+  }
+
+  async function fetchPutSignedUrl() {
+    try {
+      const res = await fetch('http://localhost:3000/api/put-presigned-url', {
+        method: 'POST',
+        mode: 'cors',
+        headers: {
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          id: uuid,
+          contentType: 'image/jpg',
+        }),
+      })
+
+      const { putSignedUrl } = await res.json()
+      console.log('putSignedUrl', putSignedUrl)
+
+      return await uploadShot(putSignedUrl)
+    } catch (err) {
+      // Note: ideally here a better error handling
+      console.log('error')
+    }
+  }
+
+  async function uploadShot(putSignedUrl) {
+    try {
+      const uploadRes = await fetch(putSignedUrl, {
+        method: 'PUT',
+        mode: 'cors',
+        headers: {
+          "Content-type": "image/jpeg"
+        },
+        body: shot,
+      })
+      const json = await uploadRes.json()
+      console.log('json', json)
+      if (json.error) {
+        // Note: ideally here a better error handling
+        console.log('error in uploading the avatar picture')
+      }
+      return
+
+    } catch (err) {
+      // Note: ideally here a better error handling
+      console.log('error uploading shot')
+    }
+  }
+
+
+
   function handleShot() {
     const video = streamContainer.current
-
     canvas.current.width = CAMERA_WIDTH
     canvas.current.height = CAMERA_HEIGHT
     canvas.current
       .getContext('2d')
       .drawImage(video, -150, 0, 550, CAMERA_HEIGHT)
 
+    fetchPutSignedUrl()
+
     const img = canvas.current.toDataURL('image/jpeg')
     setShot(img)
-    console.log('img', img)
   }
 
   function handleClearShot() {
     const context = canvas.current.getContext('2d')
     context.clearRect(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
-  }
-
-  function handleSaveShot() {
-    var anchor = document.createElement('a')
-    anchor.href = draw.toDataURL('image/png')
-    anchor.download = 'girbil-avatar.jpeg'
-
-    handleClearShot()
   }
 
   return (
@@ -66,7 +141,7 @@ const Profile = () => {
         <Wrapper>
           <Camera>
             Webcam stream shows here
-            <Video playsinline autoplay ref={streamContainer}></Video>
+            <Video playsinline autoplay ref={streamContainer} />
           </Camera>
           <Button className='primary' onClick={handleShot}>
             Take shot
@@ -75,7 +150,7 @@ const Profile = () => {
         <Wrapper>
           <Camera>
             uploaded snapshot shows here
-            <Canvas ref={canvas}></Canvas>
+            <Canvas ref={canvas} />
           </Camera>
           <ButtonGroup flexDirection={'row'}>
             <Button
@@ -86,7 +161,9 @@ const Profile = () => {
             </Button>
             {shot !== null && (
               <Download href={shot} download='girbil-avatar.jpeg'>
-                <Button className='green'>Save</Button>
+                <Button className='green' onClick={handleClearShot}>
+                  Save
+                </Button>
               </Download>
             )}
           </ButtonGroup>

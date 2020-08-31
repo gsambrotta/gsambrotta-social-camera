@@ -1,17 +1,23 @@
-const app = require('express')();
-const server = require('http').createServer(app);
+const app = require('express')()
+const server = require('http').createServer(app)
+const bodyParser = require('body-parser')
+const routes = require('./routes/index')
+require('dotenv').config({ path: './env.env' })
 
+const port = 3000
 
-app.get('/get-presigned-url', (req, res) => {
+server.listen(port)
 
-  //  implement fetching of presigned url
-  res.status(200).send('all good');
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
 });
 
-const port = 3000;
-
-server.listen(port);
-
+app.use('/', routes)
 server.on('listening', () => {
-  console.info(`🚀server is running on port ${port}  ✊🏾✊🏾✊🏾`);
-});
+  console.info(`🚀server is running on port ${port}  ✊🏾✊🏾✊🏾`)
+})
