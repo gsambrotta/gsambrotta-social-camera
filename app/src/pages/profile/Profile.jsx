@@ -2,6 +2,7 @@
 import 'regenerator-runtime/runtime'
 import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+const Buffer = require('buffer/').Buffer
 import { Layout } from '../../components/layout'
 import { Button, ButtonGroup, Flex } from '../../components/styles'
 import { Camera, Wrapper, Error, Video, Canvas, Download } from './style'
@@ -44,7 +45,6 @@ const Profile = () => {
   // which make the process faster and with better performance
   // since the image doesn't need to be download again
   async function getSignedUrl() {
-    console.log('id', uuid)
     try {
       const res = await fetch('http://localhost:3000/api/get-presigned-url', {
         method: 'POST',
@@ -58,53 +58,54 @@ const Profile = () => {
       })
 
       const { getSignedUrl } = await res.json()
-      // setShot(getSignedUrl)
+      setShot(getSignedUrl)
     } catch (err) {
       // Note: ideally here a better error handling
       console.log('error')
     }
   }
 
-  async function fetchPutSignedUrl() {
-    try {
-      const res = await fetch('http://localhost:3000/api/put-presigned-url', {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-          "Content-type": "application/json"
-        },
-        body: JSON.stringify({
-          id: uuid,
-          contentType: 'image/jpg',
-        }),
-      })
+  useEffect(() => {
+    async function fetchPutSignedUrl() {
+      try {
+        const res = await fetch('http://localhost:3000/api/put-presigned-url', {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify({
+            id: uuid,
+            contentType: 'image/jpg',
+          }),
+        })
 
-      const { putSignedUrl } = await res.json()
-      console.log('putSignedUrl', putSignedUrl)
-
-      return await uploadShot(putSignedUrl)
-    } catch (err) {
-      // Note: ideally here a better error handling
-      console.log('error')
+        const { putSignedUrl } = await res.json()
+        if (shot !== null) {
+          return await uploadShot(putSignedUrl)
+        }
+      } catch (err) {
+        // Note: ideally here a better error handling
+        console.log('error')
+      }
     }
-  }
+
+    fetchPutSignedUrl()
+  }, [shot])
 
   async function uploadShot(putSignedUrl) {
+    console.log('putSignedUrl', putSignedUrl)
+    const buffer = Buffer.from(shot.replace(/^data:image\/\w+;base64,/, ""), 'base64');
+
+    // console.log('buffer', buffer)
+    // console.log('shot', shot)
     try {
       const uploadRes = await fetch(putSignedUrl, {
         method: 'PUT',
         mode: 'cors',
-        headers: {
-          "Content-type": "image/jpeg"
-        },
         body: shot,
       })
-      const json = await uploadRes.json()
-      console.log('json', json)
-      if (json.error) {
-        // Note: ideally here a better error handling
-        console.log('error in uploading the avatar picture')
-      }
+      console.log('uploaded!')
       return
 
     } catch (err) {
@@ -123,10 +124,9 @@ const Profile = () => {
       .getContext('2d')
       .drawImage(video, -150, 0, 550, CAMERA_HEIGHT)
 
-    fetchPutSignedUrl()
-
     const img = canvas.current.toDataURL('image/jpeg')
     setShot(img)
+    // fetchPutSignedUrl()
   }
 
   function handleClearShot() {

@@ -37,6 +37,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/styled-components": "^4.1.16",
     "babel-plugin-module-resolver": "^4.0.0",
+    "buffer": "^5.6.0",
     "eslint": "^5.14.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-react-app": "^4.0.1",

@@ -7,7 +7,7 @@ export const LayoutContainer = styled.div`
   background: #222222;
   display: flex;
   justify-content: center;
-  padding-top: 40px;
+  padding-top: 30px;
 `;
 
 export const Footer = styled.div`

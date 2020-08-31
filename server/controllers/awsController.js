@@ -9,7 +9,7 @@ function awsConfig() {
   AWS.config.update(config)
 
   const S3 = new AWS.S3({
-    signatureVersion: 'v4',
+    // signatureVersion: 'v4',
     params: { Bucket: process.env.S3_BUCKET_NAME },
   })
 
@@ -46,6 +46,7 @@ exports.putPresignedUrl = async (req, res) => {
     Key: `giorgia/${id}/avatar.jpg`,
     Expires: 15 * 60, // 15 minutes
     ContentType: contentType,
+    //ACL: 'public-read',
   }
   const url = await S3.getSignedUrlPromise('putObject', params)
 

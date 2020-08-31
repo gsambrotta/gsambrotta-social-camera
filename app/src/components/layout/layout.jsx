@@ -26,7 +26,7 @@ const Layout = ({
         height={height}
         minHeight={minHeight}
         maxHeight={maxHeight}
-        padding={padding || '56px 48px 20px 48px'}
+        padding={padding || '26px 48px 20px 48px'}
         loading={loading.toString()}
       >
         {
@@ -38,46 +38,46 @@ const Layout = ({
         }
         {
           back && (
-          <div className="layout-back-icon" role="presentation" onClick={backTrigger}>
-            <Back />
-            <Text
-              cursor="pointer"
-              color="#ffffff"
-              size="14px"
-              margin="0 0 0 4px"
-            >
-              {' Back'}
-            </Text>
-          </div>
+            <div className="layout-back-icon" role="presentation" onClick={backTrigger}>
+              <Back />
+              <Text
+                cursor="pointer"
+                color="#ffffff"
+                size="14px"
+                margin="0 0 0 4px"
+              >
+                {' Back'}
+              </Text>
+            </div>
           )
         }
         <Fragment>
           <Flex>
             <Title align="center" width="100%">{title}</Title>
             {Boolean(buttonText) && (
-            <Button
-              className="green layout-button"
-              width="126px"
-              height="24px"
-              onClick={buttonAction}
-            >
-              {buttonText}
-            </Button>
+              <Button
+                className="green layout-button"
+                width="126px"
+                height="24px"
+                onClick={buttonAction}
+              >
+                {buttonText}
+              </Button>
             )}
           </Flex>
           <>
             {children}
             {withFooter
               && (
-              <Footer>
-                <Text size="14px" align="center">
-                  Girbil is made with
+                <Footer>
+                  <Text size="14px" align="center">
+                    Girbil is made with
                   <span role="img" aria-label="love">
-                    {' ❤️ '}
-                  </span>
+                      {' ❤️ '}
+                    </span>
                   around the world by a remote team.
                 </Text>
-              </Footer>
+                </Footer>
               )
             }
           </>
@@ -91,9 +91,9 @@ Layout.defaultProps = {
   height: 'fit-content',
   loading: false,
   nav: null,
-  padding: '56px 48px 20px 48px',
+  padding: '26px 48px 20px 48px',
   buttonText: '',
-  buttonAction: () => {},
+  buttonAction: () => { },
   backAction: null,
   back: false,
   withFooter: false,
