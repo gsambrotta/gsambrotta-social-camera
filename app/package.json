@@ -13,6 +13,9 @@
     "lint": "node_modules/.bin/eslint --ext .jsx --ext .js src"
   },
   "proxy": "http://localhost:3000",
+  "permissions": [
+    "downloads"
+  ],
   "dependencies": {
     "@apollo/client": "^3.1.3",
     "firebase": "^7.19.0",

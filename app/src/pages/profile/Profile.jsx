@@ -39,11 +39,10 @@ const Profile = () => {
     streamVideo()
   }, [])
 
-  // NOTE: This function is not really necessary, I mostly implemented
-  // for the sake of showing how to get and download an image from S3.
-  // I personally think is better to give the local image to the user
-  // which make the process faster and with better performance
-  // since the image doesn't need to be download again
+  // NOTE: This function is not used, I implemented for the sake of showing
+  // how to get and download an image from S3, as requested in the task description.
+  // I personally think is better to use the shot we already have in memory
+  // and doing so we avoid another request improving performance.
   async function getSignedUrl() {
     try {
       const res = await fetch('http://localhost:3000/api/get-presigned-url', {
@@ -57,32 +56,24 @@ const Profile = () => {
         }),
       })
 
-      const { getSignedUrl } = await res.json()
-      getShot(getSignedUrl)
+      const json = await res.json()
+      if (json.ok) {
+        browser.downloads.download({
+          url: getSignedUrl,
+          filename: 'girbill-avatar.jpg'
+        })
+      } else {
+        console.log('error getting the shot')
+      }
     } catch (err) {
       // Note: ideally here a better error handling
       console.log('error')
     }
   }
 
-  async function getShot(getSignedUrl) {
-    console.log('getSignedUrl', getSignedUrl)
-
-    try {
-      const uploadRes = await fetch(getSignedUrl, {
-        method: 'GET',
-        mode: 'cors',
-      })
-      const img = await uploadRes()
-      return setShot(img)
-
-    } catch (err) {
-      // Note: ideally here a better error handling
-      console.log('error uploading shot')
-    }
-  }
-
   useEffect(() => {
+    if (shot === null) return
+
     async function fetchPutSignedUrl() {
       try {
         const res = await fetch('http://localhost:3000/api/put-presigned-url', {
@@ -98,9 +89,12 @@ const Profile = () => {
         })
 
         const { putSignedUrl } = await res.json()
-        if (shot !== null) {
+        if (putSignedUrl) {
           return await uploadShot(putSignedUrl)
+        } else {
+          console.log('error fetching put presignedurl')
         }
+
       } catch (err) {
         // Note: ideally here a better error handling
         console.log('error')
@@ -112,9 +106,8 @@ const Profile = () => {
 
   async function uploadShot(putSignedUrl) {
     const buffer = Buffer.from(shot.replace(/^data:image\/\w+;base64,/, ""), 'base64');
-
     try {
-      const uploadRes = await fetch(putSignedUrl, {
+      const res = await fetch(putSignedUrl, {
         method: 'PUT',
         mode: 'cors',
         body: buffer,
@@ -124,7 +117,6 @@ const Profile = () => {
         }
       })
       return
-
     } catch (err) {
       // Note: ideally here a better error handling
       console.log('error uploading shot')
@@ -143,12 +135,12 @@ const Profile = () => {
 
     const img = canvas.current.toDataURL('image/jpeg')
     setShot(img)
-    // fetchPutSignedUrl()
   }
 
   function handleClearShot() {
     const context = canvas.current.getContext('2d')
     context.clearRect(0, 0, CAMERA_WIDTH, CAMERA_HEIGHT)
+    setShot(null)
   }
 
   return (

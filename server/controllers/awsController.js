@@ -9,7 +9,6 @@ function awsConfig() {
   AWS.config.update(config)
 
   const S3 = new AWS.S3({
-    // signatureVersion: 'v4',
     params: { Bucket: process.env.S3_BUCKET_NAME },
   })
 
