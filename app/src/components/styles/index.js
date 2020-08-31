@@ -1,11 +1,11 @@
-import styled from 'styled-components';
+import styled from 'styled-components'
 
 export const DividerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
 
-  &  > .divider {
+  & > .divider {
     height: 1px;
     background-color: #666666;
     width: calc(100% - 40px);
@@ -20,16 +20,16 @@ export const DividerContainer = styled.div`
     justify-content: center;
     align-items: center;
   }
-`;
+`
 
 export const Title = styled.h1`
-  font-size: ${props => props.size};
-  margin: ${props => props.margin};
-  width: ${props => props.width};
-  text-transform: ${props => props.transform};
-  font-weight: ${props => props.weight};
+  font-size: ${(props) => props.size};
+  margin: ${(props) => props.margin};
+  width: ${(props) => props.width};
+  text-transform: ${(props) => props.transform};
+  font-weight: ${(props) => props.weight};
   text-align: center;
-`;
+`
 
 Title.defaultProps = {
   size: '24px',
@@ -37,7 +37,7 @@ Title.defaultProps = {
   width: 'initial',
   transform: 'initial',
   weight: 'bold',
-};
+}
 
 export const StyledA = styled.a`
   font-family: Source Sans Pro;
@@ -46,20 +46,20 @@ export const StyledA = styled.a`
   font-size: 14px;
   line-height: 18px;
   text-decoration-line: underline;
-  color: #0A84FF;
-`;
+  color: #0a84ff;
+`
 
 export const Text = styled.p`
-  color: ${props => props.color || 'var(--gb-web-text)'};
-  margin: ${props => props.margin};
-  font-size: ${props => props.size};
-  text-align: ${props => props.align};
-  position: ${props => props.position};
-  cursor: ${props => (props.cursor ? 'pointer' : 'initial')};
-  font-weight: ${props => props.weight};
-  text-transform: ${props => props.transform};
-  width: ${props => props.width};
-`;
+  color: ${(props) => props.color || 'var(--gb-web-text)'};
+  margin: ${(props) => props.margin};
+  font-size: ${(props) => props.size};
+  text-align: ${(props) => props.align};
+  position: ${(props) => props.position};
+  cursor: ${(props) => (props.cursor ? 'pointer' : 'initial')};
+  font-weight: ${(props) => props.weight};
+  text-transform: ${(props) => props.transform};
+  width: ${(props) => props.width};
+`
 
 Text.defaultProps = {
   margin: '0',
@@ -68,36 +68,36 @@ Text.defaultProps = {
   weight: 'initial',
   transform: 'initial',
   width: 'initial',
-};
+}
 
 export const Input = styled.input`
-  text-align: ${props => props.align || 'initial'};
+  text-align: ${(props) => props.align || 'initial'};
 
   &::placeholder {
-    text-align: ${props => props.align || 'initial'};
-    text-transform: ${props => props.transform || 'capitalize'};
+    text-align: ${(props) => props.align || 'initial'};
+    text-transform: ${(props) => props.transform || 'capitalize'};
   }
-`;
+`
 
 export const InputWrapper = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center; 
-`;
+  align-items: center;
+`
 
 export const Flex = styled.div`
   display: flex;
-  justify-content: ${props => props.justify};
-  align-items: ${props => props.align};
-  flex-direction: ${props => props.direction};
-  margin: ${props => props.margin};
-  padding: ${props => props.padding};
-  width: ${props => props.width};
-  height: ${props => props.height || 'unset'};
-  min-width: ${props => props.width};
-  cursor: ${props => (props.cursor ? props.cursor : 'initial')};
-  border-bottom: ${props => (props.bordered ? '1px solid #ffffff' : 'none')};
-`;
+  justify-content: ${(props) => props.justify};
+  align-items: ${(props) => props.align};
+  flex-direction: ${(props) => props.direction};
+  margin: ${(props) => props.margin};
+  padding: ${(props) => props.padding};
+  width: ${(props) => props.width};
+  height: ${(props) => props.height || 'unset'};
+  min-width: ${(props) => props.width};
+  cursor: ${(props) => (props.cursor ? props.cursor : 'initial')};
+  border-bottom: ${(props) => (props.bordered ? '1px solid #ffffff' : 'none')};
+`
 
 Flex.defaultProps = {
   margin: '0',
@@ -106,21 +106,21 @@ Flex.defaultProps = {
   justify: 'flex-start',
   align: 'center',
   width: 'initial',
-};
+}
 
 export const Form = styled.div`
   input {
     margin-bottom: 24px;
   }
-`;
+`
 
 export const Button = styled.button`
-  margin: ${props => props.margin};
-  width: ${props => props.width};
-  height: ${props => props.height};
-  text-align: ${props => props.align};
-  font-weight: ${props => props.weight};
-`;
+  margin: ${(props) => props.margin};
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  text-align: ${(props) => props.align};
+  font-weight: ${(props) => props.weight};
+`
 
 Button.defaultProps = {
   weight: 'bold',
@@ -129,7 +129,11 @@ Button.defaultProps = {
   margin: '0',
   padding: '0',
   align: 'center',
-};
+}
+
+export const ButtonGroup = styled.div`
+  display: flex;
+`
 
 export const InputWithError = styled.div`
   margin-bottom: 24px;
@@ -141,7 +145,7 @@ export const InputWithError = styled.div`
   span {
     color: var(--gb-red);
   }
-`;
+`
 
 export const InputWithInlineError = styled.div`
   position: relative;
@@ -166,7 +170,7 @@ export const InputWithInlineError = styled.div`
       margin-left: 5px;
     }
   }
-`;
+`
 
 export const Image = styled.div`
   width: ${({ width }) => width};
@@ -174,13 +178,13 @@ export const Image = styled.div`
   background-image: url(${({ src }) => src});
   background-position: center;
   background-size: cover;
-  border-radius: ${({ radius }) => (radius || '2px')};
-`;
+  border-radius: ${({ radius }) => radius || '2px'};
+`
 
 Image.defaultProps = {
   width: '32px',
   height: '40px',
-};
+}
 
 export const Tooltip = styled.div`
   width: ${({ width }) => width};
@@ -193,7 +197,7 @@ export const Tooltip = styled.div`
   z-index: 1;
 
   ::after {
-    content: " ";
+    content: ' ';
     position: relative;
     bottom: 48px;
     left: -30px;
@@ -202,26 +206,28 @@ export const Tooltip = styled.div`
     border-style: solid;
     border-color: transparent transparent black transparent;
   }
-`;
+`
 
 Tooltip.defaultProps = {
   width: '160px',
   background: 'var(--gb-black)',
-};
+}
 
 export const Active = styled.div`
   box-sizing: border-box;
-  width: ${props => props.width};
-  height: ${props => props.width};
+  width: ${(props) => props.width};
+  height: ${(props) => props.width};
   border-radius: 100px;
-  background-color: ${props => (props.active ? 'var(--gb-green)' : 'transparent')};
-  border: 2px solid ${props => (props.active ? 'var(--gb-green);' : '#999999')};
+  background-color: ${(props) =>
+    props.active ? 'var(--gb-green)' : 'transparent'};
+  border: 2px solid
+    ${(props) => (props.active ? 'var(--gb-green);' : '#999999')};
   margin-right: 10px;
-`;
+`
 
 Active.defaultProps = {
   width: '16px',
-};
+}
 
 export const TextImage = styled.div`
   background-color: #fff;
@@ -234,13 +240,13 @@ export const TextImage = styled.div`
   max-height: ${({ height }) => height};
   border-radius: ${({ borderRadius }) => borderRadius};
   border-radius: 2px;
-`;
+`
 
 TextImage.defaultProps = {
   height: '136px',
   width: '126px',
   borderRadius: '0px',
-};
+}
 
 export const Video = styled.video`
   object-fit: cover;
@@ -252,10 +258,10 @@ export const Video = styled.video`
   max-height: ${({ height }) => height};
   border-radius: ${({ borderRadius }) => borderRadius};
   border-radius: 2px;
-`;
+`
 
 Video.defaultProps = {
   height: '136px',
   width: '126px',
   borderRadius: '0px',
-};
+}
